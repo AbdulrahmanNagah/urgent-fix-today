@@ -11,10 +11,10 @@ import { BookingRequest } from '@/types';
 const egyptianPhoneRegex = /^01[0125][0-9]{8}$/;
 
 const bookingSchema = z.object({
-  userName: z.string().min(2, 'Name must be at least 2 characters'),
-  phone: z.string().regex(egyptianPhoneRegex, 'Enter a valid Egyptian phone number (e.g., 01012345678)'),
-  address: z.string().min(5, 'Please enter your full address'),
-  problemDescription: z.string().min(10, 'Please describe your problem in at least 10 characters'),
+  userName: z.string().min(2, 'الاسم لازم يكون أكتر من حرفين'),
+  phone: z.string().regex(egyptianPhoneRegex, 'اكتب رقم مصري صح (زي 01012345678)'),
+  address: z.string().min(5, 'لو سمحت اكتب العنوان بالتفصيل'),
+  problemDescription: z.string().min(10, 'اشرح المشكلة بالتفصيل شوية (أكتر من 10 حروف)'),
 });
 
 type FormErrors = Partial<Record<keyof z.infer<typeof bookingSchema>, string>>;
@@ -35,12 +35,14 @@ const BookingPage = () => {
   if (!selectedTechnician) {
     return (
       <div className="min-h-screen bg-background">
-        <PageHeader title="Book Technician" backPath="/" />
-        <EmptyState
-          title="No technician selected"
-          description="Please select a technician first."
-          action={{ label: 'Browse Technicians', onClick: () => navigate('/') }}
-        />
+        <PageHeader title="احجز الصنايعي" backPath="/" />
+        <div className="container mt-10">
+          <EmptyState
+            title="مفيش صنايعي متحدد"
+            description="لو سمحت اختار صنايعي الأول."
+            action={{ label: 'شوف الصنايعية', onClick: () => navigate('/') }}
+          />
+        </div>
       </div>
     );
   }
@@ -92,119 +94,123 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-6">
+    <div className="min-h-screen bg-background pb-10">
       <PageHeader
-        title="Book Technician"
-        subtitle="Complete your booking"
+        title="احجز الصنايعي"
+        subtitle="كمل بيانات الحجز"
         backPath={`/technician/${selectedTechnician.id}`}
       />
 
-      <div className="container py-6">
+      <div className="container py-8 max-w-lg mx-auto">
         {/* Technician Summary */}
-        <div className="card-trust p-4 mb-6 animate-fade-in">
-          <div className="flex items-center gap-4">
+        <div className="bg-secondary rounded-[1.5rem] border-2 border-foreground p-4 mb-8 shadow-[0_4px_0_hsl(355,65%,30%)] animate-fade-in">
+          <div className="flex items-center gap-4 flex-row-reverse">
             <img
               src={selectedTechnician.photoUrl}
               alt={selectedTechnician.name}
-              className="w-14 h-14 rounded-xl object-cover"
+              className="w-16 h-16 rounded-2xl object-cover border-2 border-foreground"
             />
-            <div className="flex-1">
-              <h3 className="font-semibold text-foreground">{selectedTechnician.name}</h3>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="w-4 h-4 text-accent" />
-                <span>{selectedTechnician.arrivalWindow}</span>
+            <div className="flex-1 text-right">
+              <h3 className="text-xl font-black text-foreground mb-1">{selectedTechnician.name}</h3>
+              <div className="flex items-center gap-2 text-sm text-foreground/80 flex-row-reverse justify-start">
+                <Clock className="w-4 h-4 text-primary" />
+                <span className="font-bold">{selectedTechnician.arrivalWindow}</span>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-bold text-foreground">
+            <div className="text-left">
+              <p className="text-lg font-black text-primary">
                 {selectedTechnician.priceRangeMin}-{selectedTechnician.priceRangeMax}
               </p>
-              <p className="text-xs text-muted-foreground">EGP</p>
+              <p className="text-sm font-bold text-foreground/80">جنيه</p>
             </div>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
-          <div className="animate-fade-in" style={{ animationDelay: '50ms' }}>
-            <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-              <User className="w-4 h-4 text-muted-foreground" />
-              Your Name
+          <div className="animate-fade-in text-right" style={{ animationDelay: '50ms' }}>
+            <label className="flex items-center gap-2 justify-end text-base font-bold text-foreground mb-2 flex-row-reverse">
+              <User className="w-5 h-5 text-primary" />
+              اسمك
             </label>
             <input
               type="text"
               value={formData.userName}
               onChange={(e) => handleChange('userName', e.target.value)}
-              placeholder="Enter your full name"
-              className={`input-field w-full ${errors.userName ? 'border-destructive ring-1 ring-destructive' : ''}`}
+              placeholder="اكتب اسمك بالكامل"
+              className={`input-field w-full text-right ${errors.userName ? 'border-destructive ring-destructive' : ''}`}
+              dir="rtl"
             />
             {errors.userName && (
-              <p className="flex items-center gap-1 text-xs text-destructive mt-1">
-                <AlertCircle className="w-3 h-3" />
+              <p className="flex items-center gap-1 justify-end text-sm font-bold text-destructive mt-2 flex-row-reverse">
+                <AlertCircle className="w-4 h-4" />
                 {errors.userName}
               </p>
             )}
           </div>
 
           {/* Phone */}
-          <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
-            <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-              <Phone className="w-4 h-4 text-muted-foreground" />
-              Phone Number
+          <div className="animate-fade-in text-right" style={{ animationDelay: '100ms' }}>
+            <label className="flex items-center gap-2 justify-end text-base font-bold text-foreground mb-2 flex-row-reverse">
+              <Phone className="w-5 h-5 text-primary" />
+              رقم التليفون
             </label>
             <input
               type="tel"
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
               placeholder="01012345678"
-              className={`input-field w-full ${errors.phone ? 'border-destructive ring-1 ring-destructive' : ''}`}
+              className={`input-field w-full text-right ${errors.phone ? 'border-destructive ring-destructive' : ''}`}
+              dir="ltr"
             />
             {errors.phone && (
-              <p className="flex items-center gap-1 text-xs text-destructive mt-1">
-                <AlertCircle className="w-3 h-3" />
+              <p className="flex items-center gap-1 justify-end text-sm font-bold text-destructive mt-2 flex-row-reverse">
+                <AlertCircle className="w-4 h-4" />
                 {errors.phone}
               </p>
             )}
           </div>
 
           {/* Address */}
-          <div className="animate-fade-in" style={{ animationDelay: '150ms' }}>
-            <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-              <MapPin className="w-4 h-4 text-muted-foreground" />
-              Address
+          <div className="animate-fade-in text-right" style={{ animationDelay: '150ms' }}>
+            <label className="flex items-center gap-2 justify-end text-base font-bold text-foreground mb-2 flex-row-reverse">
+              <MapPin className="w-5 h-5 text-primary" />
+              العنوان
             </label>
             <input
               type="text"
               value={formData.address}
               onChange={(e) => handleChange('address', e.target.value)}
-              placeholder="Building number, street, area, city"
-              className={`input-field w-full ${errors.address ? 'border-destructive ring-1 ring-destructive' : ''}`}
+              placeholder="رقم العمارة، الشارع، المنطقة، المحافظة"
+              className={`input-field w-full text-right ${errors.address ? 'border-destructive ring-destructive' : ''}`}
+              dir="rtl"
             />
             {errors.address && (
-              <p className="flex items-center gap-1 text-xs text-destructive mt-1">
-                <AlertCircle className="w-3 h-3" />
+              <p className="flex items-center gap-1 justify-end text-sm font-bold text-destructive mt-2 flex-row-reverse">
+                <AlertCircle className="w-4 h-4" />
                 {errors.address}
               </p>
             )}
           </div>
 
           {/* Problem Description */}
-          <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-              <FileText className="w-4 h-4 text-muted-foreground" />
-              Problem Description
+          <div className="animate-fade-in text-right" style={{ animationDelay: '200ms' }}>
+            <label className="flex items-center gap-2 justify-end text-base font-bold text-foreground mb-2 flex-row-reverse">
+              <FileText className="w-5 h-5 text-primary" />
+              وصف المشكلة
             </label>
             <textarea
               value={formData.problemDescription}
               onChange={(e) => handleChange('problemDescription', e.target.value)}
-              placeholder="Describe your issue (e.g., Leaking pipe under kitchen sink, water dripping for 2 days)"
+              placeholder="اشرح المشكلة (مثلا: الحوض بينقط بقاله يومين، فيشة محروقة)"
               rows={3}
-              className={`input-field w-full resize-none ${errors.problemDescription ? 'border-destructive ring-1 ring-destructive' : ''}`}
+              className={`input-field w-full resize-none rounded-3xl text-right ${errors.problemDescription ? 'border-destructive ring-destructive' : ''}`}
+              dir="rtl"
             />
             {errors.problemDescription && (
-              <p className="flex items-center gap-1 text-xs text-destructive mt-1">
-                <AlertCircle className="w-3 h-3" />
+              <p className="flex items-center gap-1 justify-end text-sm font-bold text-destructive mt-2 flex-row-reverse">
+                <AlertCircle className="w-4 h-4" />
                 {errors.problemDescription}
               </p>
             )}
@@ -212,12 +218,12 @@ const BookingPage = () => {
 
           {/* Payment Notice */}
           <div
-            className="bg-secondary rounded-lg p-4 animate-fade-in"
+            className="bg-primary/10 border-2 border-primary rounded-2xl p-5 text-right animate-fade-in"
             style={{ animationDelay: '250ms' }}
           >
-            <p className="text-sm text-foreground font-medium mb-1">Payment after service</p>
-            <p className="text-xs text-muted-foreground">
-              Payment will be made directly to the technician after service completion.
+            <p className="text-lg text-foreground font-black mb-1">الدفع بعد الشغل</p>
+            <p className="text-sm font-semibold text-foreground/80">
+              المحاسبة هتكون مع الصنايعي بعد ما يخلص الشغل.
             </p>
           </div>
 
@@ -225,10 +231,10 @@ const BookingPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full btn-primary py-4 rounded-xl text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed animate-fade-in"
+            className="w-full btn-primary py-4 text-xl mt-4 animate-fade-in"
             style={{ animationDelay: '300ms' }}
           >
-            {isSubmitting ? 'Confirming...' : 'Confirm Booking'}
+            {isSubmitting ? 'بيأكد الحجز...' : 'أكد الحجز'}
           </button>
         </form>
       </div>

@@ -17,7 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Cairo', 'system-ui', 'sans-serif'],
+        display: ['Lalezar', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

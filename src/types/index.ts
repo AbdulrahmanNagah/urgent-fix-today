@@ -1,6 +1,6 @@
 // Sanay3i MVP Types
 
-export type ServiceType = 'plumbing' | 'electrical';
+export type ServiceType = 'plumbing' | 'electrical' | 'carpentry' | 'hvac' | 'appliances' | 'painting';
 
 export type ExperienceLevel = 'junior' | 'mid' | 'senior';
 
@@ -8,12 +8,15 @@ export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 export type IssueFlag = 'no-show' | 'late' | 'poor-work' | null;
 
+export type Location = 'مدينة نصر' | 'المعادي' | 'التجمع الخامس' | 'الشيخ زايد' | 'مصر الجديدة';
+
 export interface Technician {
   id: string;
   name: string;
   photoUrl: string;
   serviceType: ServiceType;
   experienceLevel: ExperienceLevel;
+  location: Location;
   priceRangeMin: number;
   priceRangeMax: number;
   reliabilityScore: number; // 0-100

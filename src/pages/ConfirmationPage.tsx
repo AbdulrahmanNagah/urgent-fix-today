@@ -14,12 +14,14 @@ const ConfirmationPage = () => {
   if (!currentBooking) {
     return (
       <div className="min-h-screen bg-background">
-        <PageHeader title="Confirmation" showBack={false} />
-        <EmptyState
-          title="No booking found"
-          description="You haven't made a booking yet."
-          action={{ label: 'Book Now', onClick: () => navigate('/') }}
-        />
+        <PageHeader title="التأكيد" showBack={false} />
+        <div className="container mt-10">
+          <EmptyState
+            title="مفيش حجز"
+            description="لسه ما عملتش حجز."
+            action={{ label: 'احجز دلوقتي', onClick: () => navigate('/') }}
+          />
+        </div>
       </div>
     );
   }
@@ -41,41 +43,41 @@ const ConfirmationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-6">
-      <PageHeader title="Booking Confirmed" showBack={false} />
+    <div className="min-h-screen bg-background pb-10">
+      <PageHeader title="تم تأكيد الحجز" showBack={false} />
 
-      <div className="container py-6">
+      <div className="container py-8 max-w-lg mx-auto">
         {/* Success Header */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex p-4 rounded-full bg-success/10 mb-4">
-            <CheckCircle2 className="w-12 h-12 text-success" />
+        <div className="text-center mb-10 animate-fade-in">
+          <div className="inline-flex p-5 rounded-[2rem] bg-success border-4 border-foreground shadow-[0_8px_0_hsl(355,65%,30%)] mb-6">
+            <CheckCircle2 className="w-16 h-16 text-background" />
           </div>
-          <h2 className="text-xl font-bold text-foreground mb-2">
-            Your technician is confirmed!
+          <h2 className="text-3xl font-black text-foreground mb-3">
+            تم تأكيد الصنايعي!
           </h2>
-          <p className="text-sm text-muted-foreground">
-            They will arrive today as scheduled.
+          <p className="text-lg font-semibold text-foreground/80">
+            هيوصل النهارده في ميعاده.
           </p>
         </div>
 
         {/* Booking Reference */}
         <div
-          className="card-trust p-4 mb-4 animate-fade-in"
+          className="bg-secondary rounded-[1.5rem] border-2 border-foreground p-5 mb-6 shadow-[0_4px_0_hsl(355,65%,30%)] animate-fade-in text-right"
           style={{ animationDelay: '100ms' }}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-row-reverse">
             <div>
-              <p className="text-xs text-muted-foreground mb-0.5">Booking Reference</p>
-              <p className="text-lg font-bold text-foreground font-mono">{currentBooking.id}</p>
+              <p className="text-sm font-bold text-foreground/80 mb-1">رقم الحجز</p>
+              <p className="text-2xl font-black text-primary font-mono">{currentBooking.id}</p>
             </div>
             <button
               onClick={handleCopyRef}
-              className="p-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+              className="p-3 rounded-xl bg-background border-2 border-foreground hover:bg-secondary transition-colors"
             >
               {copied ? (
-                <Check className="w-5 h-5 text-success" />
+                <Check className="w-6 h-6 text-success" />
               ) : (
-                <Copy className="w-5 h-5 text-muted-foreground" />
+                <Copy className="w-6 h-6 text-foreground" />
               )}
             </button>
           </div>
@@ -84,19 +86,28 @@ const ConfirmationPage = () => {
         {/* Technician Info */}
         {technician && (
           <div
-            className="card-trust p-4 mb-4 animate-fade-in"
+            className="bg-background rounded-[1.5rem] border-2 border-foreground p-5 mb-6 shadow-[0_4px_0_hsl(355,65%,30%)] animate-fade-in"
             style={{ animationDelay: '150ms' }}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-row-reverse">
               <img
                 src={technician.photoUrl}
                 alt={technician.name}
-                className="w-14 h-14 rounded-xl object-cover"
+                className="w-16 h-16 rounded-2xl object-cover border-2 border-foreground"
               />
-              <div className="flex-1">
-                <h3 className="font-semibold text-foreground">{technician.name}</h3>
-                <p className="text-sm text-muted-foreground capitalize">
-                  {technician.serviceType}
+              <div className="flex-1 text-right">
+                <h3 className="text-xl font-black text-foreground">{technician.name}</h3>
+                <p className="text-base font-bold text-foreground/80">
+                  {
+                    {
+                      plumbing: 'سباكة',
+                      electrical: 'كهرباء',
+                      carpentry: 'نجارة',
+                      hvac: 'تكييف',
+                      appliances: 'أجهزة منزلية',
+                      painting: 'نقاشة',
+                    }[technician.serviceType] || technician.serviceType
+                  }
                 </p>
               </div>
             </div>
@@ -105,39 +116,39 @@ const ConfirmationPage = () => {
 
         {/* Booking Details */}
         <div
-          className="card-trust p-4 mb-6 animate-fade-in"
+          className="bg-background rounded-[2rem] border-2 border-foreground p-6 mb-8 shadow-[0_6px_0_hsl(355,65%,30%)] animate-fade-in text-right"
           style={{ animationDelay: '200ms' }}
         >
-          <h3 className="font-semibold text-foreground mb-4">Booking Details</h3>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+          <h3 className="text-2xl font-black text-foreground mb-6">تفاصيل الحجز</h3>
+          <div className="space-y-4">
+            <div className="flex items-start gap-4 flex-row-reverse">
+              <Clock className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
               <div>
-                <p className="text-xs text-muted-foreground">Arrival Window</p>
-                <p className="text-sm font-medium text-foreground">
-                  Today, {currentBooking.arrivalWindow}
+                <p className="text-sm font-bold text-foreground/80">ميعاد الوصول</p>
+                <p className="text-base font-black text-foreground">
+                  النهارده، {currentBooking.arrivalWindow}
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <User className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4 flex-row-reverse">
+              <User className="w-6 h-6 text-foreground/80 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-xs text-muted-foreground">Name</p>
-                <p className="text-sm font-medium text-foreground">{currentBooking.userName}</p>
+                <p className="text-sm font-bold text-foreground/80">الاسم</p>
+                <p className="text-base font-black text-foreground">{currentBooking.userName}</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <Phone className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4 flex-row-reverse">
+              <Phone className="w-6 h-6 text-foreground/80 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-xs text-muted-foreground">Phone</p>
-                <p className="text-sm font-medium text-foreground">{currentBooking.phone}</p>
+                <p className="text-sm font-bold text-foreground/80">رقم التليفون</p>
+                <p className="text-base font-black text-foreground" dir="ltr">{currentBooking.phone}</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4 flex-row-reverse">
+              <MapPin className="w-6 h-6 text-foreground/80 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-xs text-muted-foreground">Address</p>
-                <p className="text-sm font-medium text-foreground">{currentBooking.address}</p>
+                <p className="text-sm font-bold text-foreground/80">العنوان</p>
+                <p className="text-base font-black text-foreground">{currentBooking.address}</p>
               </div>
             </div>
           </div>
@@ -146,37 +157,37 @@ const ConfirmationPage = () => {
         {/* Price Reminder */}
         {technician && (
           <div
-            className="bg-secondary rounded-lg p-4 mb-6 animate-fade-in"
+            className="bg-primary/10 border-2 border-primary rounded-2xl p-5 mb-8 animate-fade-in text-right"
             style={{ animationDelay: '250ms' }}
           >
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-foreground">Estimated Price</p>
-              <p className="text-lg font-bold text-foreground">
-                {technician.priceRangeMin} - {technician.priceRangeMax} EGP
+            <div className="flex items-center justify-between flex-row-reverse">
+              <p className="text-base font-bold text-foreground">السعر المتوقع</p>
+              <p className="text-2xl font-black text-primary">
+                {technician.priceRangeMin} - {technician.priceRangeMax} جنيه
               </p>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Pay directly to technician after service
+            <p className="text-sm font-semibold text-foreground/80 mt-2">
+              الدفع هيكون مع الصنايعي بعد ما يخلص
             </p>
           </div>
         )}
 
         {/* Actions */}
         <div
-          className="space-y-3 animate-fade-in"
+          className="space-y-4 animate-fade-in"
           style={{ animationDelay: '300ms' }}
         >
           <button
             onClick={handleLeaveFeedback}
-            className="w-full btn-primary py-4 rounded-xl text-base font-semibold"
+            className="w-full btn-primary py-4 text-xl"
           >
-            Leave Feedback After Service
+            سيب تقييم بعد الشغل
           </button>
           <button
             onClick={handleBookAnother}
-            className="w-full btn-secondary py-4 rounded-xl text-base font-semibold"
+            className="w-full btn-secondary py-4 text-xl"
           >
-            Book Another Technician
+            احجز صنايعي تاني
           </button>
         </div>
       </div>

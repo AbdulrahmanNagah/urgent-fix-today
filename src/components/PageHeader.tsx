@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface PageHeaderProps {
@@ -20,21 +20,21 @@ export const PageHeader = ({ title, subtitle, showBack = true, backPath }: PageH
   };
 
   return (
-    <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
+    <header className="sticky top-0 z-10 bg-background/90 backdrop-blur-md border-b-2 border-foreground">
       <div className="container py-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4 flex-row-reverse">
           {showBack && (
             <button
               onClick={handleBack}
-              className="p-2 -ml-2 rounded-lg hover:bg-secondary transition-colors"
-              aria-label="Go back"
+              className="p-2 -mr-2 rounded-full hover:bg-secondary transition-colors border-2 border-transparent hover:border-foreground"
+              aria-label="ارجع"
             >
-              <ArrowLeft className="w-5 h-5 text-foreground" />
+              <ArrowRight className="w-6 h-6 text-foreground" />
             </button>
           )}
-          <div>
-            <h1 className="text-lg font-bold text-foreground">{title}</h1>
-            {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+          <div className="text-right flex-1">
+            <h1 className="text-2xl font-black text-foreground uppercase">{title}</h1>
+            {subtitle && <p className="text-sm font-semibold text-foreground/80">{subtitle}</p>}
           </div>
         </div>
       </div>

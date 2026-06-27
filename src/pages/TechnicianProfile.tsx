@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Shield, Clock, Award, Briefcase, CheckCircle2 } from 'lucide-react';
+import { Shield, Clock, Award, Briefcase, CheckCircle2, MapPin, Star } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { StarRating } from '@/components/StarRating';
 import { EmptyState } from '@/components/EmptyState';
@@ -7,9 +7,9 @@ import { getTechnicianById } from '@/data/technicians';
 import { useBooking } from '@/context/BookingContext';
 
 const experienceLabels = {
-  junior: 'Junior Technician',
-  mid: 'Mid-Level Technician',
-  senior: 'Senior Technician',
+  junior: 'صنايعي',
+  mid: 'خبرة',
+  senior: 'أسطى',
 };
 
 const TechnicianProfile = () => {
@@ -22,12 +22,14 @@ const TechnicianProfile = () => {
   if (!technician) {
     return (
       <div className="min-h-screen bg-background">
-        <PageHeader title="Technician" backPath="/" />
-        <EmptyState
-          title="Profile unavailable"
-          description="This technician profile could not be found."
-          action={{ label: 'Browse Technicians', onClick: () => navigate('/') }}
-        />
+        <PageHeader title="صنايعي" backPath="/" />
+        <div className="container mt-10">
+          <EmptyState
+            title="البروفايل مش موجود"
+            description="مش لاقيين بيانات الصنايعي ده."
+            action={{ label: 'شوف صنايعية تانيين', onClick: () => navigate('/') }}
+          />
+        </div>
       </div>
     );
   }
@@ -40,98 +42,115 @@ const TechnicianProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-32">
       <PageHeader
-        title="Technician Profile"
+        title="بروفايل الصنايعي"
         backPath={selectedService ? `/technicians/${selectedService}` : '/'}
       />
 
       {/* Profile Header */}
-      <div className="container py-6">
-        <div className="flex flex-col items-center text-center mb-6 animate-fade-in">
-          <div className="relative mb-4">
+      <div className="container py-8">
+        <div className="flex flex-col items-center text-center mb-8 animate-fade-in">
+          <div className="relative mb-6">
             <img
               src={technician.photoUrl}
               alt={technician.name}
-              className="w-28 h-28 rounded-2xl object-cover shadow-card"
+              className="w-32 h-32 rounded-[2rem] object-cover border-4 border-foreground shadow-[0_8px_0_hsl(355,65%,30%)]"
             />
             {technician.verified && (
-              <div className="absolute -bottom-2 -right-2 bg-success text-success-foreground rounded-full p-1.5 shadow-lg">
-                <Shield className="w-4 h-4" />
+              <div className="absolute -bottom-3 -left-3 bg-foreground text-background rounded-full p-2 border-2 border-background shadow-lg">
+                <Shield className="w-6 h-6" />
               </div>
             )}
           </div>
-          <h2 className="text-xl font-bold text-foreground mb-1">{technician.name}</h2>
-          <p className="text-sm text-muted-foreground mb-3">
+          <h2 className="text-3xl font-black text-foreground mb-2">{technician.name}</h2>
+          <p className="text-lg font-bold text-primary mb-4">
             {experienceLabels[technician.experienceLevel]}
           </p>
 
           {/* Reliability */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-row-reverse">
             <StarRating rating={reliabilityStars} size="md" />
-            <span className="text-sm font-semibold text-foreground">
+            <span className="text-lg font-black text-foreground">
               {technician.reliabilityScore}%
             </span>
-            <span className="text-sm text-muted-foreground">reliable</span>
+            <span className="text-base font-semibold text-foreground/80">نسبة الثقة</span>
           </div>
         </div>
 
-        {/* Info Cards */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="card-trust p-4 text-center">
-            <Clock className="w-5 h-5 text-accent mx-auto mb-2" />
-            <p className="text-xs text-muted-foreground mb-0.5">Arriving Today</p>
-            <p className="text-sm font-bold text-foreground">{technician.arrivalWindow}</p>
+        {/* Stats */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-background rounded-2xl border-2 border-foreground p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-foreground/80 mb-1 flex-row-reverse">
+                <Star className="w-4 h-4 text-primary" />
+                <span className="font-bold">نسبة الثقة</span>
+              </div>
+              <p className="text-xl font-black text-foreground">{technician.reliabilityScore}%</p>
+            </div>
+            <div className="bg-background rounded-2xl border-2 border-foreground p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-foreground/80 mb-1 flex-row-reverse">
+                <Award className="w-4 h-4 text-primary" />
+                <span className="font-bold">شغلانة</span>
+              </div>
+              <p className="text-xl font-black text-foreground">{technician.completedJobs}</p>
+            </div>
+            <div className="bg-background rounded-2xl border-2 border-foreground p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-foreground/80 mb-1 flex-row-reverse">
+                <Clock className="w-4 h-4 text-primary" />
+                <span className="font-bold">ميعاد الوصول</span>
+              </div>
+              <p className="text-xl font-black text-foreground">{technician.arrivalWindow}</p>
+            </div>
+            <div className="bg-background rounded-2xl border-2 border-foreground p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-foreground/80 mb-1 flex-row-reverse">
+                <MapPin className="w-4 h-4 text-primary" />
+                <span className="font-bold">المنطقة</span>
+              </div>
+              <p className="text-xl font-black text-foreground">{technician.location}</p>
+            </div>
           </div>
-          <div className="card-trust p-4 text-center">
-            <Briefcase className="w-5 h-5 text-primary mx-auto mb-2" />
-            <p className="text-xs text-muted-foreground mb-0.5">Experience</p>
-            <p className="text-sm font-bold text-foreground">{technician.yearsOfExperience} years</p>
-          </div>
-          <div className="card-trust p-4 text-center">
-            <Award className="w-5 h-5 text-warning mx-auto mb-2" />
-            <p className="text-xs text-muted-foreground mb-0.5">Completed Jobs</p>
-            <p className="text-sm font-bold text-foreground">{technician.completedJobs}</p>
-          </div>
-          <div className="card-trust p-4 text-center">
-            <CheckCircle2 className="w-5 h-5 text-success mx-auto mb-2" />
-            <p className="text-xs text-muted-foreground mb-0.5">Verification</p>
-            <p className="text-sm font-bold text-foreground">
-              {technician.verified ? 'Verified' : 'Pending'}
-            </p>
-          </div>
-        </div>
 
         {/* Price Range */}
-        <div className="card-trust p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Estimated Price Range</p>
-              <p className="text-2xl font-bold text-foreground">
+        <div className="bg-background rounded-[2rem] border-2 border-foreground p-6 mb-8 shadow-[0_6px_0_hsl(355,65%,30%)]">
+          <div className="flex items-center justify-between flex-row-reverse mb-4">
+            <div className="text-right">
+              <p className="text-base font-bold text-foreground/80 mb-1">السعر المتوقع</p>
+              <p className="text-3xl font-black text-primary">
                 {technician.priceRangeMin} - {technician.priceRangeMax}{' '}
-                <span className="text-base font-medium text-muted-foreground">EGP</span>
+                <span className="text-xl font-bold text-foreground/80">جنيه</span>
               </p>
             </div>
-            <div className="text-right">
-              <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-md">
-                {technician.serviceType === 'plumbing' ? 'Plumbing' : 'Electrical'}
+            <div className="text-left">
+              <span className="text-sm font-bold border-2 border-foreground text-foreground px-4 py-2 rounded-full bg-secondary">
+                {
+                  {
+                    plumbing: 'سباكة',
+                    electrical: 'كهرباء',
+                    carpentry: 'نجارة',
+                    hvac: 'تكييف',
+                    appliances: 'أجهزة منزلية',
+                    painting: 'نقاشة',
+                  }[technician.serviceType] || technician.serviceType
+                }
               </span>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Final price depends on job complexity. Payment after service completion.
+          <p className="text-sm font-semibold text-foreground/70 text-right">
+            السعر النهائي بيتحدد حسب الشغلانة. الدفع بعد ما الشغل يخلص.
           </p>
         </div>
 
         {/* Trust Signals */}
         {technician.verified && (
-          <div className="bg-success/5 border border-success/20 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-foreground mb-1">Verified Technician</p>
-                <p className="text-xs text-muted-foreground">
-                  Identity verified • Background checked • Skills assessed
+          <div className="bg-secondary rounded-[1.5rem] border-2 border-foreground p-5 shadow-[0_4px_0_hsl(355,65%,30%)]">
+            <div className="flex items-start gap-4 flex-row-reverse">
+              <div className="bg-primary text-primary-foreground p-2 rounded-xl border-2 border-foreground">
+                <Shield className="w-6 h-6" />
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-foreground mb-1">صنايعي معتمد</p>
+                <p className="text-sm font-semibold text-foreground/80">
+                  البيانات متراجعة • الفيش والتشبيه سليم • المهارات متجربة
                 </p>
               </div>
             </div>
@@ -140,13 +159,13 @@ const TechnicianProfile = () => {
       </div>
 
       {/* Fixed Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4">
-        <div className="container">
+      <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-md border-t-2 border-foreground p-4 z-50">
+        <div className="container max-w-lg mx-auto">
           <button
             onClick={handleBookNow}
-            className="w-full btn-primary py-4 rounded-xl text-base font-semibold"
+            className="w-full btn-primary py-4 text-xl"
           >
-            Book Now
+            احجز دلوقتي
           </button>
         </div>
       </div>
