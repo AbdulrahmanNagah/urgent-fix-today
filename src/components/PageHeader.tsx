@@ -27,7 +27,7 @@ export const PageHeader = ({ title, subtitle, showBack = true, backPath }: PageH
   return (
     <header className="sticky top-0 z-10 bg-background/90 backdrop-blur-md border-b-2 border-foreground">
       <div className="container py-4">
-        <div className="flex items-center gap-4 flex-row-reverse">
+        <div className="flex items-center gap-4">
           {showBack && (
             <button
               onClick={handleBack}

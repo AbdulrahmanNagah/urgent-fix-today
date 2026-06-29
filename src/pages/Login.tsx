@@ -104,7 +104,11 @@ const Login = () => {
     const res = await login(demoPhone);
     if (res.success) {
       toast.success(res.message);
-      navigate(fromPath);
+      if (res.role === 'technician') {
+        navigate('/account');
+      } else {
+        navigate(fromPath);
+      }
     } else {
       toast.error(res.message);
     }
@@ -127,7 +131,11 @@ const Login = () => {
     const res = await login(phone);
     if (res.success) {
       toast.success(res.message);
-      navigate(fromPath);
+      if (res.role === 'technician') {
+        navigate('/account');
+      } else {
+        navigate(fromPath);
+      }
     } else {
       toast.error(res.message);
       setErrors({ phone: res.message });

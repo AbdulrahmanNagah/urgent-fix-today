@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (phone: string) => Promise<{ success: boolean; message: string }>;
+  login: (phone: string) => Promise<{ success: boolean; message: string; role?: 'customer' | 'technician' | 'admin' }>;
   register: (
     name: string,
     phone: string,
@@ -128,7 +128,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.setItem('sanay3i_registered_users', JSON.stringify(users));
   };
 
-  const login = async (phone: string): Promise<{ success: boolean; message: string }> => {
+  const login = async (phone: string): Promise<{ success: boolean; message: string; role?: 'customer' | 'technician' | 'admin' }> => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 600));
 
@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(adminUser);
       localStorage.setItem('sanay3i_active_user', JSON.stringify(adminUser));
       setIsLoading(false);
-      return { success: true, message: 'تم تسجيل دخول المسؤول بنجاح!' };
+      return { success: true, message: 'تم تسجيل دخول المسؤول بنجاح!', role: 'admin' };
     }
 
     // 2. Check Technicians database
@@ -162,7 +162,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(techUser);
       localStorage.setItem('sanay3i_active_user', JSON.stringify(techUser));
       setIsLoading(false);
-      return { success: true, message: 'تم تسجيل دخول الصنايعي بنجاح!' };
+      return { success: true, message: 'تم تسجيل دخول الصنايعي بنجاح!', role: 'technician' };
     }
 
     // 3. Check Customers database
@@ -177,7 +177,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(customerUser);
       localStorage.setItem('sanay3i_active_user', JSON.stringify(customerUser));
       setIsLoading(false);
-      return { success: true, message: 'تم تسجيل الدخول بنجاح!' };
+      return { success: true, message: 'تم تسجيل الدخول بنجاح!', role: 'customer' };
     } else {
       setIsLoading(false);
       return { success: false, message: 'رقم الهاتف ده مش مسجل. يرجى إنشاء حساب أولاً.' };

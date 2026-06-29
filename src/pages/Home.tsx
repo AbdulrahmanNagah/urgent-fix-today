@@ -20,7 +20,7 @@ const Home = () => {
       {/* Hero Section (Deep Red) */}
       <div className="bg-primary text-primary-foreground border-b-4 border-foreground relative overflow-hidden">
         {/* Top navigation header row */}
-        <div className="container py-4 flex items-center justify-between relative z-20 flex-row-reverse">
+        <div className="container py-4 flex items-center justify-between relative z-20">
           <div className="text-right">
             <span className="text-2xl font-black tracking-widest text-primary-foreground select-none">صنايعي</span>
           </div>
@@ -48,7 +48,7 @@ const Home = () => {
         <div className="container py-12 pb-24 relative z-10 text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight tracking-tight uppercase">
-              صنايعية معتمدين.<br/>النهارده.
+              صنايعية معتمدين.<br />النهارده.
             </h1>
             <p className="text-primary-foreground/90 text-xl md:text-2xl max-w-xl mx-auto font-bold leading-relaxed">
               احجز أحسن صنايعية في مصر. بييجوا في ميعادهم، وأسعارهم واضحة، ومن غير فرهدة.
@@ -146,7 +146,7 @@ const Home = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
               <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-foreground -z-10"></div>
-              
+
               <div className="text-center flex flex-col items-center bg-background p-8 rounded-[2rem] border-4 border-foreground shadow-[0_6px_0_hsl(355,65%,30%)]">
                 <div className="w-16 h-16 rounded-full bg-primary text-background font-black text-3xl flex items-center justify-center border-4 border-foreground mb-6 shadow-lg">1</div>
                 <h3 className="text-2xl font-black text-foreground mb-3">اختار الخدمة</h3>
@@ -154,7 +154,7 @@ const Home = () => {
                   حدد المشكلة اللي عندك واختار الصنايعي المناسب لميزانيتك وميعادك.
                 </p>
               </div>
-              
+
               <div className="text-center flex flex-col items-center bg-background p-8 rounded-[2rem] border-4 border-foreground shadow-[0_6px_0_hsl(355,65%,30%)] md:-translate-y-8">
                 <div className="w-16 h-16 rounded-full bg-primary text-background font-black text-3xl flex items-center justify-center border-4 border-foreground mb-6 shadow-lg">2</div>
                 <h3 className="text-2xl font-black text-foreground mb-3">أكد الحجز</h3>
@@ -176,41 +176,41 @@ const Home = () => {
 
         {/* Why Choose Us */}
         <div className="container mb-10">
-           <div className="bg-primary rounded-[3rem] border-4 border-foreground p-10 md:p-16 text-center shadow-[0_12px_0_hsl(355,80%,20%)] relative overflow-hidden">
-              <Star className="absolute top-10 left-10 w-20 h-20 text-background/20 animate-pulse-soft" />
-              <Star className="absolute bottom-10 right-10 w-32 h-32 text-background/20 animate-pulse-soft" style={{ animationDelay: '1s' }} />
-              
-              <h2 className="text-4xl md:text-6xl font-black text-background uppercase mb-8 relative z-10">
-                ليه الناس بتختارنا؟
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto relative z-10 text-right">
-                <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
-                  <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
-                  <p className="text-xl font-bold text-background">ضمان على الشغل المخلص</p>
-                </div>
-                <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
-                  <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
-                  <p className="text-xl font-bold text-background">أسعار واضحة ومفيش مفاجآت</p>
-                </div>
-                <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
-                  <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
-                  <p className="text-xl font-bold text-background">صنايعية متراجعين ومتجربين</p>
-                </div>
-                <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
-                  <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
-                  <p className="text-xl font-bold text-background">دعم فني جاهز يحل مشاكلك</p>
-                </div>
+          <div className="bg-primary rounded-[3rem] border-4 border-foreground p-10 md:p-16 text-center shadow-[0_12px_0_hsl(355,80%,20%)] relative overflow-hidden">
+            <Star className="absolute top-10 left-10 w-20 h-20 text-background/20 animate-pulse-soft" />
+            <Star className="absolute bottom-10 right-10 w-32 h-32 text-background/20 animate-pulse-soft" style={{ animationDelay: '1s' }} />
+
+            <h2 className="text-4xl md:text-6xl font-black text-background uppercase mb-8 relative z-10">
+              ليه الناس بتختارنا؟
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto relative z-10 text-right">
+              <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
+                <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
+                <p className="text-xl font-bold text-background">ضمان على الشغل المخلص</p>
               </div>
-           </div>
+              <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
+                <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
+                <p className="text-xl font-bold text-background">أسعار واضحة ومفيش مفاجآت</p>
+              </div>
+              <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
+                <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
+                <p className="text-xl font-bold text-background">صنايعية متراجعين ومتجربين</p>
+              </div>
+              <div className="bg-background/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-background/20 flex items-center gap-4 flex-row-reverse">
+                <CheckCircle2 className="w-8 h-8 text-background flex-shrink-0" />
+                <p className="text-xl font-bold text-background">دعم فني جاهز يحل مشاكلك</p>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
 
       {/* Footer Area (Deep Red) */}
       <div className="bg-primary text-primary-foreground border-t-4 border-foreground py-20 text-center relative overflow-hidden">
-         <h2 className="text-6xl md:text-9xl font-black uppercase tracking-widest px-4 leading-normal opacity-90 drop-shadow-md">
-           صنايعي <br /> في الإنجاز
-         </h2>
+        <h2 className="text-4xl md:text-7xl font-black uppercase tracking-widest px-4 leading-normal opacity-90 drop-shadow-md">
+          صنايعي <br /> في الإنجاز
+        </h2>
       </div>
     </div>
   );
