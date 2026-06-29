@@ -1,14 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { Clock, User, Phone, MapPin, FileText, AlertCircle } from 'lucide-react';
+import { Clock, User, Phone, MapPin, FileText, AlertCircle, Sparkles, Info } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { EmptyState } from '@/components/EmptyState';
 import { useBooking } from '@/context/BookingContext';
+import { useAuth } from '@/context/AuthContext';
 import { BookingRequest } from '@/types';
 
 // Egyptian phone regex: starts with 01, followed by 0/1/2/5, then 8 digits
 const egyptianPhoneRegex = /^01[0125][0-9]{8}$/;
+
+const hourSlotLabels: Record<string, string> = {
+  '10:00 AM - 12:00 PM': '10:00 ص - 12:00 م',
+  '12:00 PM - 2:00 PM': '12:00 م - 02:00 م',
+  '2:00 PM - 4:00 PM': '02:00 م - 04:00 م',
+  '4:00 PM - 6:00 PM': '04:00 م - 06:00 م',
+  '6:00 PM - 8:00 PM': '06:00 م - 08:00 م',
+};
 
 const bookingSchema = z.object({
   userName: z.string().min(2, 'الاسم لازم يكون أكتر من حرفين'),
@@ -22,6 +31,7 @@ type FormErrors = Partial<Record<keyof z.infer<typeof bookingSchema>, string>>;
 const BookingPage = () => {
   const navigate = useNavigate();
   const { selectedTechnician, selectedService, addBooking, setCurrentBooking } = useBooking();
+  const { user, isAuthenticated } = useAuth();
 
   const [formData, setFormData] = useState({
     userName: '',
@@ -31,6 +41,29 @@ const BookingPage = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [arrivalWindow, setArrivalWindow] = useState<string>('');
+
+  useEffect(() => {
+    if (selectedTechnician) {
+      if (selectedTechnician.availableHours && selectedTechnician.availableHours.length > 0) {
+        setArrivalWindow(selectedTechnician.availableHours[0]);
+      } else {
+        setArrivalWindow(selectedTechnician.arrivalWindow);
+      }
+    }
+  }, [selectedTechnician]);
+
+  // Prefill details if user is logged in
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        userName: user.name,
+        phone: user.phone,
+        address: user.address,
+      }));
+    }
+  }, [user]);
 
   if (!selectedTechnician) {
     return (
@@ -75,6 +108,7 @@ const BookingPage = () => {
     const booking: BookingRequest = {
       id: `BK-${Date.now()}`,
       technicianId: selectedTechnician.id,
+      userId: user?.id, // Link to user ID if logged in
       userName: formData.userName,
       phone: formData.phone,
       address: formData.address,
@@ -82,7 +116,7 @@ const BookingPage = () => {
       selectedService: selectedService || selectedTechnician.serviceType,
       status: 'confirmed',
       createdAt: new Date(),
-      arrivalWindow: selectedTechnician.arrivalWindow,
+      arrivalWindow: arrivalWindow || selectedTechnician.arrivalWindow,
     };
 
     // Simulate API call
@@ -125,6 +159,32 @@ const BookingPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Auth Notice */}
+        {isAuthenticated ? (
+          <div className="bg-green-50 border-2 border-green-800 text-green-800 rounded-2xl p-4 mb-6 text-right flex items-center gap-2 flex-row-reverse animate-fade-in">
+            <Sparkles className="w-5 h-5 text-green-700 flex-shrink-0" />
+            <p className="text-xs font-black text-foreground">
+              تم ملء الاسم، التليفون، والعنوان تلقائياً من حسابك.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-yellow-50 border-2 border-yellow-600 text-yellow-900 rounded-2xl p-4 mb-6 text-right flex items-center justify-between flex-row-reverse animate-fade-in gap-3">
+            <div className="flex items-center gap-2 flex-row-reverse">
+              <Info className="w-5 h-5 text-yellow-700 flex-shrink-0" />
+              <p className="text-xs font-bold leading-tight">
+                سجل دخولك لتوفير وقتك وملء بيانات الحجز تلقائياً.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/login', { state: { from: '/booking' } })}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold px-3 py-1.5 rounded-xl border border-yellow-800 text-xs flex-shrink-0 transition-colors"
+            >
+              تسجيل دخول
+            </button>
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -191,6 +251,34 @@ const BookingPage = () => {
                 <AlertCircle className="w-4 h-4" />
                 {errors.address}
               </p>
+            )}
+          </div>
+
+          {/* Preferred Arrival Window Select Option */}
+          <div className="animate-fade-in text-right" style={{ animationDelay: '180ms' }}>
+            <label className="flex items-center gap-2 justify-end text-base font-bold text-foreground mb-2 flex-row-reverse">
+              <Clock className="w-5 h-5 text-primary" />
+              توقيت الوصول المفضل
+            </label>
+            {selectedTechnician.availableHours && selectedTechnician.availableHours.length > 0 ? (
+              <div className="relative">
+                <select
+                  value={arrivalWindow}
+                  onChange={(e) => setArrivalWindow(e.target.value)}
+                  className="w-full bg-background border-2 border-foreground text-foreground rounded-full px-6 py-3 text-right font-bold appearance-none cursor-pointer focus:outline-none focus:ring-4 focus:ring-primary/20"
+                  dir="rtl"
+                >
+                  {selectedTechnician.availableHours.map((slot) => (
+                    <option key={slot} value={slot}>
+                      {hourSlotLabels[slot] || slot}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="w-full bg-secondary border-2 border-foreground rounded-full px-6 py-3 text-right font-bold text-foreground/80">
+                {selectedTechnician.arrivalWindow} (الموعد الافتراضي الوحيد)
+              </div>
             )}
           </div>
 

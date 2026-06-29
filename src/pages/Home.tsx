@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { Droplets, Zap, Shield, Clock, Banknote, Hammer, Snowflake, MonitorPlay, PaintRoller, Star, CheckCircle2 } from 'lucide-react';
+import { Droplets, Zap, Shield, Clock, Banknote, Hammer, Snowflake, MonitorPlay, PaintRoller, Star, CheckCircle2, User as UserIcon, LogIn } from 'lucide-react';
 import { ServiceCard } from '@/components/ServiceCard';
 import { useBooking } from '@/context/BookingContext';
+import { useAuth } from '@/context/AuthContext';
 import { ServiceType } from '@/types';
 
 const Home = () => {
   const navigate = useNavigate();
   const { setSelectedService } = useBooking();
+  const { user, isAuthenticated } = useAuth();
 
   const handleServiceSelect = (service: ServiceType) => {
     setSelectedService(service);
@@ -17,7 +19,33 @@ const Home = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section (Deep Red) */}
       <div className="bg-primary text-primary-foreground border-b-4 border-foreground relative overflow-hidden">
-        <div className="container py-20 pb-28 relative z-10 text-center">
+        {/* Top navigation header row */}
+        <div className="container py-4 flex items-center justify-between relative z-20 flex-row-reverse">
+          <div className="text-right">
+            <span className="text-2xl font-black tracking-widest text-primary-foreground select-none">صنايعي</span>
+          </div>
+          <div className="text-left animate-fade-in">
+            {isAuthenticated ? (
+              <button
+                onClick={() => navigate('/account')}
+                className="flex items-center gap-2 px-4 py-2 bg-secondary text-foreground border-2 border-foreground rounded-full hover:bg-background transition-all font-black text-sm"
+              >
+                <span className="max-w-[100px] truncate">{user?.name.split(' ')[0]}</span>
+                <UserIcon className="w-4 h-4 text-primary" />
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="flex items-center gap-2 px-4 py-2 bg-background text-foreground border-2 border-foreground rounded-full hover:bg-secondary transition-all font-black text-sm shadow-[0_3px_0_foreground]"
+              >
+                <span>دخول / إنشاء حساب</span>
+                <LogIn className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="container py-12 pb-24 relative z-10 text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight tracking-tight uppercase">
               صنايعية معتمدين.<br/>النهارده.

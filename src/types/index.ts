@@ -24,18 +24,34 @@ export interface Technician {
   arrivalWindow: string; // e.g., "10:00 AM - 12:00 PM"
   yearsOfExperience: number;
   completedJobs: number;
+  phone?: string;
+  nationalId?: string;
+  criminalRecordNumber?: string;
+  criminalRecordAttached?: boolean;
+  availableHours?: string[];
+}
+
+export interface User {
+  id: string;
+  name: string;
+  phone: string;
+  address?: string;
+  location: Location;
+  role: 'customer' | 'technician' | 'admin';
+  technicianId?: string;
 }
 
 export interface BookingRequest {
   id: string;
   technicianId: string;
+  userId?: string;
   userName: string;
   phone: string;
   address: string;
   problemDescription: string;
   selectedService: ServiceType;
   status: BookingStatus;
-  createdAt: Date;
+  createdAt: Date | string; // Allow string from JSON parse
   arrivalWindow: string;
 }
 

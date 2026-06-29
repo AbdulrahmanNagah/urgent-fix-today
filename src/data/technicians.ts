@@ -16,6 +16,7 @@ export const technicians: Technician[] = [
     arrivalWindow: '10:00 AM - 11:00 AM',
     yearsOfExperience: 12,
     completedJobs: 847,
+    phone: '01011111111',
   },
   {
     id: 'p2',
@@ -31,6 +32,7 @@ export const technicians: Technician[] = [
     arrivalWindow: '11:00 AM - 12:00 PM',
     yearsOfExperience: 6,
     completedJobs: 312,
+    phone: '01022222222',
   },
   {
     id: 'p3',
@@ -249,9 +251,28 @@ export const technicians: Technician[] = [
   },
 ];
 
+export const getLocalStorageTechnicians = (): Technician[] => {
+  if (typeof window === 'undefined') return technicians;
+  const saved = localStorage.getItem('sanay3i_technicians');
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to parse technicians from localStorage', e);
+    }
+  }
+  localStorage.setItem('sanay3i_technicians', JSON.stringify(technicians));
+  return technicians;
+};
+
+export const saveLocalStorageTechnicians = (techs: Technician[]) => {
+  localStorage.setItem('sanay3i_technicians', JSON.stringify(techs));
+};
+
 export const getTechniciansByService = (serviceType: ServiceType): Technician[] => {
-  return technicians
-    .filter((t) => t.serviceType === serviceType)
+  const allTechs = getLocalStorageTechnicians();
+  return allTechs
+    .filter((t) => t.serviceType === serviceType && t.verified === true)
     .sort((a, b) => {
       // Sort by arrival time (earliest first)
       const timeA = a.arrivalWindow.split(' - ')[0];
@@ -261,5 +282,32 @@ export const getTechniciansByService = (serviceType: ServiceType): Technician[] 
 };
 
 export const getTechnicianById = (id: string): Technician | undefined => {
-  return technicians.find((t) => t.id === id);
+  const allTechs = getLocalStorageTechnicians();
+  return allTechs.find((t) => t.id === id);
+};
+
+export const getUnverifiedTechnicians = (): Technician[] => {
+  const allTechs = getLocalStorageTechnicians();
+  return allTechs.filter((t) => !t.verified);
+};
+
+export const verifyTechnician = (id: string): boolean => {
+  const allTechs = getLocalStorageTechnicians();
+  const techIndex = allTechs.findIndex((t) => t.id === id);
+  if (techIndex > -1) {
+    allTechs[techIndex].verified = true;
+    saveLocalStorageTechnicians(allTechs);
+    return true;
+  }
+  return false;
+};
+
+export const rejectTechnician = (id: string): boolean => {
+  const allTechs = getLocalStorageTechnicians();
+  const filtered = allTechs.filter((t) => t.id !== id);
+  if (filtered.length !== allTechs.length) {
+    saveLocalStorageTechnicians(filtered);
+    return true;
+  }
+  return false;
 };
