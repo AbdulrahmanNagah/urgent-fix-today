@@ -5,6 +5,7 @@ import { StarRating } from '@/components/StarRating';
 import { EmptyState } from '@/components/EmptyState';
 import { getTechnicianById } from '@/data/technicians';
 import { useBooking } from '@/context/BookingContext';
+import { useAuth } from '@/context/AuthContext';
 
 const experienceLabels = {
   junior: 'صنايعي',
@@ -16,6 +17,7 @@ const TechnicianProfile = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { setSelectedTechnician, selectedService } = useBooking();
+  const { user } = useAuth();
 
   const technician = id ? getTechnicianById(id) : undefined;
 
@@ -159,16 +161,18 @@ const TechnicianProfile = () => {
       </div>
 
       {/* Fixed Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-md border-t-2 border-foreground p-4 z-50">
-        <div className="container max-w-lg mx-auto">
-          <button
-            onClick={handleBookNow}
-            className="w-full btn-primary py-4 text-xl"
-          >
-            احجز دلوقتي
-          </button>
+      {user?.role !== 'technician' && (
+        <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-md border-t-2 border-foreground p-4 z-50">
+          <div className="container max-w-lg mx-auto">
+            <button
+              onClick={handleBookNow}
+              className="w-full btn-primary py-4 text-xl"
+            >
+              احجز دلوقتي
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
